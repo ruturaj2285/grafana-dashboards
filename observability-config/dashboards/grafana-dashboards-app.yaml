@@ -9,9 +9,9 @@ spec:
     server: https://kubernetes.default.svc
     namespace: monitoring
   source:
-    repoURL: https://github.com/<your-org>/observability-config.git
+    repoURL: https://github.com/ruturaj2285/grafana-dashboards.git
     targetRevision: main
-    path: dashboards
+    path: observability-config/dashboards
   syncPolicy:
     automated:
       prune: true
