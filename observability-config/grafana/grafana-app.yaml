@@ -11,11 +11,10 @@ spec:
   source:
     repoURL: https://grafana.github.io/helm-charts
     chart: grafana
-    targetRevision: 8.*           # chart version range, or pin exact version
+    targetRevision: 8.*            # chart version range or exact version like 8.3.6
     helm:
-      valueFiles: []
+      releaseName: grafana
       values: |
-        {{- /* inline our values file for simplicity */ -}}
         adminUser: admin
         adminPassword: grafana123
         service:
