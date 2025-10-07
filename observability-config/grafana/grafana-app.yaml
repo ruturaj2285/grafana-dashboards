@@ -1,0 +1,45 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: grafana
+  namespace: argocd
+spec:
+  project: default
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: monitoring
+  source:
+    repoURL: https://grafana.github.io/helm-charts
+    chart: grafana
+    targetRevision: 8.*           # chart version range, or pin exact version
+    helm:
+      valueFiles: []
+      values: |
+        {{- /* inline our values file for simplicity */ -}}
+        adminUser: admin
+        adminPassword: grafana123
+        service:
+          type: LoadBalancer
+        persistence:
+          enabled: true
+          size: 5Gi
+        datasources:
+          datasources.yaml:
+            apiVersion: 1
+            datasources:
+              - name: Prometheus
+                type: prometheus
+                url: http://prometheus-server.monitoring.svc.cluster.local
+                access: proxy
+                isDefault: true
+        sidecar:
+          dashboards:
+            enabled: true
+            label: grafana_dashboard
+            folder: /var/lib/grafana/dashboards
+            searchNamespace: ALL
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+

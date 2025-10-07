@@ -1,0 +1,29 @@
+adminUser: admin
+adminPassword: grafana123   # for demo only; store in a Secret for prod
+
+service:
+  type: LoadBalancer         # or ClusterIP + Ingress if you prefer
+
+persistence:
+  enabled: true
+  size: 5Gi
+
+# === Prometheus datasource (edit URL for your setup) ===
+datasources:
+  datasources.yaml:
+    apiVersion: 1
+    datasources:
+      - name: Prometheus
+        type: prometheus
+        url: http://prometheus-server.monitoring.svc.cluster.local
+        access: proxy
+        isDefault: true
+
+# === Auto-pickup dashboards from ConfigMaps via sidecar ===
+sidecar:
+  dashboards:
+    enabled: true
+    label: grafana_dashboard
+    folder: /var/lib/grafana/dashboards
+    searchNamespace: ALL
+
